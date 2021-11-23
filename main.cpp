@@ -18,10 +18,6 @@ std::map<std::string, Method> stringToEnum = {
         {"PRZESUN", Method::MOVE}
 };
 
-
-void loadFile(std::string name);
-std::pair<std::string, std::string> parseToPair(std::string &line);
-
 char getMovedChar(char key) {
     if (key >= 90) {
         return 'A';
@@ -64,12 +60,16 @@ public:
 
 };
 
+StringBuffer loadFile(const std::string& name);
+std::pair<std::string, std::string> parseToPair(std::string &line);
+
 int main() {
-    loadFile("przyklad.txt");
+    StringBuffer buffer = loadFile("przyklad.txt");
+    std::cout << buffer.toString();
     return 0;
 }
 
-void loadFile(std::string name) {
+StringBuffer loadFile(const std::string& name) {
     std::ifstream input(name);
     std::string line;
     StringBuffer buffer;
@@ -78,9 +78,11 @@ void loadFile(std::string name) {
         while(std::getline(input, line)) {
             auto pair = parseToPair(line);
             Method method = stringToEnum[pair.first];
-
+            buffer.invokeMethod(method, pair.second);
         }
     }
+
+    return buffer;
 }
 
 std::pair<std::string, std::string> parseToPair(std::string &line) {
