@@ -42,7 +42,8 @@ public:
     void invokeMethod(Method method, std::string &text) {
         if (lastCached.first != method) {
             lastCached = std::make_pair(method, 1);
-        } else if (stats[method] > ++lastCached.second) {
+        }
+        if (stats[method] < ++lastCached.second) {
             stats[method] = lastCached.second;
         }
 
@@ -109,18 +110,26 @@ StringBuffer loadFile(const std::string& name) {
 
     if(input.good()) {
         while(std::getline(input, line)) {
-            auto pair = parseToPair(line);
-            Method method = stringToEnum[pair.first];
-            buffer.invokeMethod(method, pair.second);
+            auto [key, value] = parseToPair(line);
+            Method method = stringToEnum[key];
+            buffer.invokeMethod(method, value);
         }
     }
 
     return buffer;
 }
 
-int main() {
-    StringBuffer buffer = loadFile("przyklad.txt");
+void printData(StringBuffer buffer) {
     std::cout << buffer.toString() << "\n";
-    std::cout << buffer.toString().length();
+    std::cout << buffer.toString().length() << "\n";
+    std::cout << buffer.getStats(Method::APPEND);
+}
+
+int main() {
+    StringBuffer przykladBuffer = loadFile("przyklad.txt");
+    printData(przykladBuffer);
+
+    StringBuffer buffer = loadFile("instrukcje.txt");
+    printData(buffer);
     return 0;
 }
