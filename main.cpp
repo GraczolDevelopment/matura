@@ -43,8 +43,11 @@ public:
     void invokeMethod(Method method, std::string &text) {
         if (lastCached.first != method) {
             lastCached = std::make_pair(method, 1);
+        } else {
+            lastCached.second++;
         }
-        if (stats[method] < ++lastCached.second) {
+        
+        if (stats[method] < lastCached.second) {
             stats[method] = lastCached.second;
         }
 
@@ -150,13 +153,18 @@ StringBuffer loadFile(const std::string& name) {
 void printData(StringBuffer buffer) {
     std::cout << buffer.toString() << "\n";
     std::cout << buffer.toString().length() << "\n";
-    std::cout << buffer.getStats(Method::APPEND);
+
+    auto [method, value] = buffer.getTopStat();
+
+    std::cout << enumMap[method] << " " << value << "\n";
 }
 
 int main() {
+    std::cout << "PRZYKLAD.TXT\n";
     StringBuffer przykladBuffer = loadFile("przyklad.txt");
     printData(przykladBuffer);
 
+    std::cout << "\nINSTRUKCJA.TXT\n";
     StringBuffer buffer = loadFile("instrukcje.txt");
     printData(buffer);
     return 0;
