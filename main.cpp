@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <map>
 
@@ -10,6 +12,10 @@ std::map<Method, std::string> enumMap = {
         {Method::MOVE, "PRZESUN"}
 };
 
+
+void loadFile(std::string name);
+std::pair<std::string, std::string> parseToPair(std::string &line);
+void executeCommand(auto pair);
 
 char getMovedChar(char key) {
     if (key >= 90) {
@@ -54,6 +60,36 @@ public:
 };
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    loadFile("przyklad.txt");
     return 0;
+}
+
+void loadFile(std::string name) {
+    std::ifstream input(name);
+    std::string line;
+    StringBuffer buffer;
+
+    if(input.good()) {
+        while(std::getline(input, line)) {
+            auto pair = parseToPair(line);
+            executeCommand(pair);
+        }
+    }
+}
+
+void executeCommand(auto pair) {
+    switch() {
+
+    }
+}
+
+std::pair<std::string, std::string> parseToPair(std::string &line) {
+    std::stringstream ssin(line);
+    std::string arr[2];
+    for(auto & i : arr) {
+        if(ssin.good()) {
+            ssin >> i;
+        }
+    }
+    return std::make_pair(arr[0], arr[1]);
 }
