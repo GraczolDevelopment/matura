@@ -11,11 +11,16 @@ std::map<Method, std::string> enumMap = {
         {Method::REPLACE, "ZMIEN"},
         {Method::MOVE, "PRZESUN"}
 };
+std::map<std::string, Method> stringToEnum = {
+        {"DOPISZ", Method::APPEND},
+        {"USUN", Method::DELETE},
+        {"ZMIEN", Method::REPLACE},
+        {"PRZESUN", Method::MOVE}
+};
 
 
 void loadFile(std::string name);
 std::pair<std::string, std::string> parseToPair(std::string &line);
-void executeCommand(auto pair);
 
 char getMovedChar(char key) {
     if (key >= 90) {
@@ -72,14 +77,9 @@ void loadFile(std::string name) {
     if(input.good()) {
         while(std::getline(input, line)) {
             auto pair = parseToPair(line);
-            executeCommand(pair);
+            Method method = stringToEnum[pair.first];
+
         }
-    }
-}
-
-void executeCommand(auto pair) {
-    switch() {
-
     }
 }
 
