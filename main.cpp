@@ -76,6 +76,19 @@ public:
         return stats[method];
     }
 
+    int getTopStat() {
+        Method top = NONE;
+        int max = 0;
+
+        for (const auto& [key, value] : stats) {
+            if (value >= max) {
+                top = key;
+            }
+        }
+
+        return top;
+    }
+
 };
 
 std::pair<std::string, std::string> parseToPair(std::string &line) {
