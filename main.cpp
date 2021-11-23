@@ -76,17 +76,18 @@ public:
         return stats[method];
     }
 
-    int getTopStat() {
+    std::pair<Method, int> getTopStat() {
         Method top = NONE;
         int max = 0;
 
         for (const auto& [key, value] : stats) {
             if (value >= max) {
                 top = key;
+                max = value;
             }
         }
 
-        return top;
+        return std::make_pair(top, max);
     }
 
 };
