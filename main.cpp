@@ -1,5 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <map>
+
+enum Method { APPEND, DELETE, REPLACE, MOVE };
+std::map<Method, std::string> enumMap = {
+        {Method::APPEND, "DOPISZ"},
+        {Method::DELETE, "USUN"},
+        {Method::REPLACE, "ZMIEN"},
+        {Method::MOVE, "PRZESUN"}
+};
+
 
 char getMovedChar(char key) {
     if (key >= 90) {
@@ -12,11 +22,13 @@ char getMovedChar(char key) {
 class StringBuffer {
 
 private:
+    int appendRows = 0;
     std::vector<char> bufferedChars;
 
 public:
     void append(std::string &text) {
         bufferedChars.push_back(text[0]);
+        appendRows++;
     }
 
     void replaceLast(std::string &text) {
