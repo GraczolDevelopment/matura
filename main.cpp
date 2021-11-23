@@ -60,13 +60,15 @@ public:
 
 };
 
-StringBuffer loadFile(const std::string& name);
-std::pair<std::string, std::string> parseToPair(std::string &line);
-
-int main() {
-    StringBuffer buffer = loadFile("przyklad.txt");
-    std::cout << buffer.toString();
-    return 0;
+std::pair<std::string, std::string> parseToPair(std::string &line) {
+    std::stringstream ssin(line);
+    std::string arr[2];
+    for(auto & i : arr) {
+        if(ssin.good()) {
+            ssin >> i;
+        }
+    }
+    return std::make_pair(arr[0], arr[1]);
 }
 
 StringBuffer loadFile(const std::string& name) {
@@ -85,13 +87,9 @@ StringBuffer loadFile(const std::string& name) {
     return buffer;
 }
 
-std::pair<std::string, std::string> parseToPair(std::string &line) {
-    std::stringstream ssin(line);
-    std::string arr[2];
-    for(auto & i : arr) {
-        if(ssin.good()) {
-            ssin >> i;
-        }
-    }
-    return std::make_pair(arr[0], arr[1]);
+int main() {
+    StringBuffer buffer = loadFile("przyklad.txt");
+    std::cout << buffer.toString() << "\n";
+    std::cout << buffer.toString().length();
+    return 0;
 }
