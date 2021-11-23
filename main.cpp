@@ -35,6 +35,7 @@ private:
             {Method::REPLACE, 0},
             {Method::MOVE, 0}
     };
+    std::map<char, int> charStats;
     std::vector<char> bufferedChars;
     std::pair<Method, int> lastCached = std::make_pair(Method::NONE, 0);
 
@@ -47,13 +48,25 @@ public:
             stats[method] = lastCached.second;
         }
 
+        char c = text[0];
         switch (method) {
             default: break;
-            case REPLACE: bufferedChars.pop_back();
-            case APPEND: bufferedChars.push_back(text[0]); break;
+            case REPLACE: {
+                bufferedChars.pop_back();
+                bufferedChars.push_back(c);
+                break;
+            }
+            case APPEND: {
+                bufferedChars.push_back(c);
+
+                charStats[c] = charStats.find(c) == charStats.end()
+                        ? 1
+                        : charStats[c] + 1;
+                break;
+            }
             case DELETE: bufferedChars.pop_back(); break;
             case MOVE:
-                char key = text[0];
+                char key = c;
 
                 for (auto &item : bufferedChars) {
                     if (item != key) {
@@ -82,6 +95,20 @@ public:
         int max = 0;
 
         for (const auto& [key, value] : stats) {
+            if (value >= max) {
+                top = key;
+                max = value;
+            }
+        }
+
+        return std::make_pair(top, max);
+    }
+
+    std::pair<char, int> getTopCharStat() {
+        char top = '\0';
+        int max = 0;
+
+        for (const auto& [key, value] : charStats) {
             if (value >= max) {
                 top = key;
                 max = value;
