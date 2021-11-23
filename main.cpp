@@ -22,34 +22,27 @@ char getMovedChar(char key) {
 class StringBuffer {
 
 private:
-    int appendRows = 0;
     std::vector<char> bufferedChars;
 
 public:
-    void append(std::string &text) {
-        bufferedChars.push_back(text[0]);
-        appendRows++;
-    }
+    void invokeMethod(Method method, std::string &text) {
+        switch (method) {
+            case REPLACE: bufferedChars.pop_back();
+            case APPEND: bufferedChars.push_back(text[0]); break;
+            case DELETE: bufferedChars.pop_back(); break;
+            case MOVE:
+                char key = text[0];
 
-    void replaceLast(std::string &text) {
-        this->deleteLast();
-        this->append(text);
-    }
+                for (auto &item : bufferedChars) {
+                    if (item != key) {
+                        continue;
+                    }
 
-    void deleteLast() {
-        bufferedChars.pop_back();
-    }
+                    item = getMovedChar(item);
+                    return;
+                }
 
-    void moveChar(std::string &text) {
-        char key = text[0];
-
-        for (auto &item : bufferedChars) {
-            if (item != key) {
-                continue;
-            }
-
-            item = getMovedChar(item);
-            return;
+                break;
         }
     }
 
