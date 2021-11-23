@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 
-enum Method { APPEND, DELETE, REPLACE, MOVE };
+enum Method { APPEND, DELETE, REPLACE, MOVE, NONE };
 std::map<Method, std::string> enumMap = {
         {Method::APPEND, "DOPISZ"},
         {Method::DELETE, "USUN"},
@@ -29,11 +29,25 @@ char getMovedChar(char key) {
 class StringBuffer {
 
 private:
+    std::map<Method, int> stats = {
+            {Method::APPEND, 0},
+            {Method::DELETE, 0},
+            {Method::REPLACE, 0},
+            {Method::MOVE, 0}
+    };
     std::vector<char> bufferedChars;
+    std::pair<Method, int> lastCached = std::make_pair(Method::NONE, 0);
 
 public:
     void invokeMethod(Method method, std::string &text) {
+        if (lastCached.first != method) {
+            lastCached = std::make_pair(method, 1);
+        } else if (stats[method] > ++lastCached.second) {
+            stats[method] = lastCached.second;
+        }
+
         switch (method) {
+            default: break;
             case REPLACE: bufferedChars.pop_back();
             case APPEND: bufferedChars.push_back(text[0]); break;
             case DELETE: bufferedChars.pop_back(); break;
@@ -56,6 +70,10 @@ public:
     std::string toString() {
         std::string text(bufferedChars.begin(), bufferedChars.end());
         return text;
+    }
+
+    int getStats(Method method) {
+        return stats[method];
     }
 
 };
