@@ -151,12 +151,12 @@ StringBuffer loadFile(const std::string& name) {
 }
 
 void printData(StringBuffer buffer) {
-    std::cout << buffer.toString() << "\n";
     std::cout << buffer.toString().length() << "\n";
-
     auto [method, value] = buffer.getTopStat();
-
-    std::cout << enumMap[method] << " " << value << "\n";
+    std::cout << enumMap[method] << " - " << value << "\n";
+    auto [character, num] = buffer.getTopCharStat();
+    std::cout << character << " - " << num << "\n";
+    std::cout << buffer.toString() << "\n";
 }
 
 int main() {
